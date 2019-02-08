@@ -97,29 +97,16 @@ let disY;
 
 function colition(x1, x2, y1, y2, hitSize) {
 
-  // discharX = charX - (charX + 50);
-  // discharY = charY - (charY + 50);
-  //
-  // let charMiddle = Math.sqrt(Math.pow(discharX, 2) + Math.pow(discharY, 2))
-  //
-  //
-  //
-  //
-  // dishitX = hitX - (hitX + hitSize);
-  // dishitY = hitY - (hitY + hitSize);
-  //
-  // let hitMiddle = Math.sqrt(Math.pow(dishitX, 2) + Math.pow(dishitX, 2))
-  //
-  //
-  // console.log(charMiddle);
 
-  let x1mid = x1 + (50/2);
+  let x1mid = x1 + (50/2);  //calculate middle of 1st object
   let y1mid = y1 + (50/2);
 
-  let x2mid = x2 + (hitSize/2);
+  let x2mid = x2 + (hitSize/2); //calculate middle of 2nd object
   let y2mid = y2 + (hitSize/2);
 
 
+
+  // ----- STELLING VAN PITGORAS TUSSEN HET MIDDE VAN ALLE BIJ DE OBJECTEN -----
 
   disX = x1mid - x2mid;
   disY = y1mid - y2mid;
