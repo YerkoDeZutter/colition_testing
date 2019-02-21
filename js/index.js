@@ -8,6 +8,40 @@ var c = canvas.getContext("2d");
 
 
 
+
+
+
+class hitboxes {
+  constructor(x, y, w, h) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+  }
+
+  drawHit(){
+
+    c.fillStyle = "#FFF";
+
+    c.fillRect(hitbox.x, hitbox.y, hitbox.w, hitbox.h);
+
+  }
+}
+
+let allsHits = [];
+
+function createHits() {
+
+  for(var i = 0 ; i < 5 ; i++){
+    let thisHit = new hitboxes(Math.floor(Math.random()*500), Math.floor(Math.random()*500), Math.floor(Math.random()*300), Math.floor(Math.random()*300))
+    allsHits.push(thisHit)
+  }
+}
+
+createHits();
+
+
+
 // c.fillStyle = "#000";
 // c.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -16,7 +50,7 @@ let dirY = 0;
 
 function update() {
 
-
+// console.log(allsHits);
 
 
 
@@ -26,12 +60,30 @@ function update() {
   c.fillStyle = "#FFF";
   let player = c.fillRect(playerPos.x, playerPos.y, 50, 50);
 
+  const hitbox = {
+    "x": 300,
+    "y": 350,
+    "w": 150,
+    "h": 100,
+  }
 
+  for(var i = 0 ; i < 5 ; i++){
+    c.fillRect(allsHits[i].x, allsHits[i].y, allsHits[i].w, allsHits[i].h);
 
-  c.fillStyle = "#FFF";
-  let stopMe = c.fillRect(300, 350, 150, 100);
+    colition(playerPos.x, allsHits[i].x, playerPos.y, allsHits[i].y, allsHits[i].w, allsHits[i].h);
 
-  colition(playerPos.x, 300, playerPos.y, 350, 150, 100)
+    // playerMove()
+  }
+
+  // c.fillStyle = "#FFF";
+  // c.fillRect(allsHits[0].x, allsHits[0].y, allsHits[0].w, allsHits[0].h);
+  //
+  // colition(playerPos.x, allsHits[0].x, playerPos.y, allsHits[0].y, allsHits[0].w, allsHits[0].h);
+  //
+  playerMove();
+
+  dirXmov = 0;
+  dirYmov = 0;
 
   requestAnimationFrame(update);
 
@@ -90,23 +142,22 @@ function colition(x1, x2, y1, y2, hitSizeX, hitSizeY) {
 
 
 
-  // ----- STELLING VAN PITGORAS TUSSEN HET MIDDE VAN ALLE BIJ DE OBJECTEN -----
 
-  disX = x1mid - x2mid;
-  disY = y1mid - y2mid;
+// Math.abs(disX) < (50 + hitSizeX) / 2 && Math.abs(disY) < (50 + hitSizeY) / 2
 
+  if (x2 <= (x1+50) && x1 <= (x2+hitSizeX) && y2 <= (y1+50) && y1 <= (y2+hitSizeY)) {
 
-
-  // let fillME = Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2));
-  // fillME < (50 + hitSize) / 2
+    // c.fillStyle = "#255";
+    // c.fillRect(250, 0, 100, 100);
 
 
+    // Math.abs(disX) >= Math.abs(disY)
+    // x2 - (x1 + 50) < y2 - (y1 + 50) || x1 - (x2 + hitSizeX) > y1 - (y2 + hitSizeY)
 
+    if ((x2 - (x1 + 50) < 1 && x2 - (x1 + 50) > -10) || (x1 - (x2 + hitSizeX) < 1 && x1 - (x2 + hitSizeX) > -10)) {
 
-
-  if (Math.abs(disX) < (50 + hitSizeX) / 2 && Math.abs(disY) < (50 + hitSizeY) / 2) {
-
-    if (Math.abs(disX) >= Math.abs(disY)+30) {
+      c.fillStyle = "#255";
+      c.fillRect(250, 400, 100, 100);
 
       if (x1mid < x2mid) {
         dirXmov = 1;
@@ -115,7 +166,12 @@ function colition(x1, x2, y1, y2, hitSizeX, hitSizeY) {
       }
     }
 
-    if ((Math.abs(disX)-hitSizeX)+30 <= Math.abs(disY)-hitSizeY) {
+    // Math.abs(disX) <= Math.abs(disY)
+
+    if ((y2 - (y1 + 50) < 1 && y2 - (y1 + 50) > -10) || (y1 - (y2 + hitSizeY) < 1 && y1 - (y2 + hitSizeY) > -10)) {
+
+      c.fillStyle = "#fff255";
+      c.fillRect(150, 400, 100, 100);
 
       if (y1mid < y2mid) {
         dirYmov = 1;
@@ -126,11 +182,11 @@ function colition(x1, x2, y1, y2, hitSizeX, hitSizeY) {
     }
 
   } else {
-    dirXmov = 0;
-    dirYmov = 0;
+    // dirXmov = 0;
+    // dirYmov = 0;
   }
 
-  playerMove()
+  // playerMove()
 
 }
 
@@ -147,11 +203,11 @@ function playerMove() {
 
     if (dirX != 0) {
 
-      playerPos.x += dirX * movSpeed - dirXmov * movSpeed
+      playerPos.x += (dirX * movSpeed - dirXmov * movSpeed)
 
     } else {
 
-      playerPos.y += dirY * movSpeed - dirYmov * movSpeed
+      playerPos.y += (dirY * movSpeed - dirYmov * movSpeed)
 
     }
 
